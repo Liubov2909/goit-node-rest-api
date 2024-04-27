@@ -45,12 +45,12 @@ throw HttpError(400, schema.error.details[0].message);
   }
 };
 
-export const updateContact = async (req, res) => {
+export const updateContact = async (req, res, next) => {
   try {
-    const contactId = req.params.id;
-    const contact = await contactsService.updateContact(contactId, req.body);
+    const { id } = req.params;
+    const contact = await contactsService.updateContact(id, req.body);
     if (!contact) throw HttpError(404);
-    res.json(contact);
+    res.status(200).json(contact);
   } catch (error) {
     next(error);
   }
