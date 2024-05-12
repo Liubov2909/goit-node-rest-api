@@ -1,20 +1,30 @@
 import { Contact } from "../db/models/contact.js";
 
-const listContacts = () => Contact.find();
+const listContacts = async (owner, skip, limit) => {
+  return Contact.find({ owner }, "", { skip, limit });
+};
 
-const getContactById = (id) => Contact.findOne({ _id: id });
+const getContactById = async (id, owner) => {
+  return Contact.findOne({ _id: id, owner });
+};
 
-const removeContact = (id) => Contact.findOneAndDelete({ _id: id });
+const removeContact = async (id, owner) => {
+  return Contact.findOneAndDelete({ _id: id, owner });
+};
 
-const addContact = (name, email, phone) => Contact.create({ name, email, phone });
+const addContact = (body) => Contact.create(body);
 
-const updateContact = (id, data) => Contact.findByIdAndUpdate({ _id: id }, data, { new: true });
+const updateContact = async (id, data, owner) => {
+  return Contact.findOneAndDelete({ _id: id, owner }, data, { new: true });
+};
 
-const updateStatusContact =  (id, status) => Contact.findByIdAndUpdate(
-    { _id: id },
+const updateStatusContact = async (id, status, owner) => {
+  return Contact.findOneAndDelete(
+    { _id: id, owner },
     { favorite: status },
     { new: true }
   );
+};
 
 export default {
   listContacts,

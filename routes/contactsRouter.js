@@ -11,19 +11,20 @@ import {
 import { createContactSchema, updateContactSchema, updateFavoriteSchema } from "../schemas/contactsSchemas.js";
 import validateBody from "../helpers/validateBody.js";
 import { checkId } from "../middlewares/checkId.js";
+import { authenticate } from "../middlewares/authenticate.js";
 
 const contactsRouter = express.Router();
 
-contactsRouter.get("/", getAllContacts);
+contactsRouter.get("/", authenticate, getAllContacts);
 
-contactsRouter.get("/:id", checkId, getOneContact);
+contactsRouter.get("/:id", authenticate, checkId, getOneContact);
 
-contactsRouter.delete("/:id", checkId, deleteContact);
+contactsRouter.delete("/:id", authenticate, checkId, deleteContact);
 
-contactsRouter.post("/", validateBody(createContactSchema), createContact);
+contactsRouter.post("/", authenticate, validateBody(createContactSchema), createContact);
 
-contactsRouter.put("/:id", checkId, validateBody(updateContactSchema), updateContact);
+contactsRouter.put("/:id", authenticate, checkId, validateBody(updateContactSchema), updateContact);
 
-contactsRouter.patch("/:id/favorite", checkId, validateBody(updateFavoriteSchema), updateFavorite);
+contactsRouter.patch("/:id/favorite", authenticate, checkId, validateBody(updateFavoriteSchema), updateFavorite);
 
 export default contactsRouter;
