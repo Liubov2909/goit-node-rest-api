@@ -81,10 +81,11 @@ export const currentUser = async(req, res) => {
 export const updateAvatars = async (req, res, next) => {
   try { 
     if (!req.file) {
-      throw new HttpError(400, "File is missing");
+      throw HttpError(400, "File is missing");
     }
   const { _id } = req.user;
   const { path: tmpUpload, originalname } = req.file;
+  
   const filename = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarsDir, filename);
   const image = await Jimp.read(tmpUpload);
